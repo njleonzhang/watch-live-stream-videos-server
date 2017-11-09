@@ -13,7 +13,7 @@ module.exports = app => {
         const result = await user.comparePassword(password)
         if (result) {
           this.ctx.session = {
-            id: result.id
+            id: user.id
           }
           return errorCode.OK
         }
@@ -27,18 +27,18 @@ module.exports = app => {
 
     async register({ userName, password }) {
       try {
-        const result = await this.ctx.model.User.create({
+        const user = await this.ctx.model.User.create({
           userName,
           password
         })
-
-        if (result) {
-          return errorCode.OK
-        } else {
-          return errorCode.unKnownError
+        
+        this.ctx.session = {
+          id: user.id
         }
+
+        return errorCode.OK
       } catch (e) {
-        return errorCode.userAlreadyExist
+        return errorCode.unKnownError
       }
     }
   }

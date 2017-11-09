@@ -55,6 +55,6 @@ module.exports = app => {
       })
     })
   })
-
+  
   return User
 }
