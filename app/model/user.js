@@ -34,6 +34,14 @@ module.exports = app => {
     })
   }
 
+  User.associate = function () {
+    app.model.User.belongsToMany(app.model.VideoRoom, {
+      through: 'UserVideoRoom',
+      foreignKey: 'userId',
+      otherKey: 'videoRoomId'
+    })
+  }
+
   User.beforeCreate((user, options) => {
     return new Promise((resolve, reject) => {
       bcrypt.genSalt(10, (err, salt) => {

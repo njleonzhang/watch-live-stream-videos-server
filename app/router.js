@@ -5,4 +5,5 @@ module.exports = app => {
   app.post('/auth/register', 'auth.register')
   app.post('/video_room/add', 'videoRoom.add')
   app.post('/user/add_video_room', 'user.addVideoRoom')
+  app.post('/user/get_rooms', 'user.getRooms')
 };

@@ -7,7 +7,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1507887173585_3166';
 
   // add your config here
-  config.middleware = [];
+  config.middleware = ['getUser'];
 
   config.sequelize = {
     dialect: 'mysql',
