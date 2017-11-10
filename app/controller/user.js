@@ -1,5 +1,6 @@
 const jsonRes = require('../util/responseBuilder').jsonRes
 const errorCode = require('../util/errorCode').errorCode
+const _ = require('lodash')
 
 module.exports = app => {
   class UserController extends app.Controller {
@@ -10,10 +11,24 @@ module.exports = app => {
     }
 
     async getRooms() {
-      let rooms = await this.ctx.user.getVideoRooms()
-      this.ctx.body = rooms.map(({ id, platform, host, roomId }) => {
-        return { id, platform, host, roomId }
-      })
+      const { app, ctx } = this
+
+      let rooms = await ctx.user.getVideoRooms()
+      ctx.body = await Promise.all(rooms.map(async room => {
+        await ctx.service.videoRoom.updateWithDetail(room)
+
+        return _.pick(room, [
+          'id',
+          'platform',
+          'host',
+          'roomId',
+          'online',
+          'screenShoot',
+          'hostName',
+          'title',
+          'link'
+        ])
+      }))
     }
   }
 

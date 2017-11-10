@@ -19,6 +19,26 @@ module.exports = app => {
       unique: true,
       allowNull: false
     },
+    online: {
+      type: INTEGER,
+      defaultValue: 0,
+    },
+    screenShoot: {
+      type: STRING,
+      defaultValue: ''
+    },
+    hostName: {
+      type: STRING,
+      defaultValue: ''
+    },
+    title: {
+      type: STRING,
+      defaultValue: ''
+    },
+    link: {
+      type: STRING,
+      defaultValue: ''
+    }
   })
 
   VideoRoom.quickCreate = function({
