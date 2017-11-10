@@ -1,4 +1,5 @@
 const jsonRes = require('../util/responseBuilder').jsonRes
+const errorCode = require('../util/errorCode').errorCode
 
 module.exports = app => {
   class AuthController extends app.Controller {
@@ -12,6 +13,12 @@ module.exports = app => {
       const { app, ctx } = this
       const result = await ctx.service.auth.register(ctx.request.body)
       ctx.body = jsonRes(result)
+    }
+
+    async logout() {
+      const { ctx } = this
+      ctx.session = null
+      ctx.body = jsonRes(errorCode.OK)
     }
   }
 

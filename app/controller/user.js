@@ -14,7 +14,7 @@ module.exports = app => {
       const { app, ctx } = this
 
       let rooms = await ctx.user.getVideoRooms()
-      ctx.body = await Promise.all(rooms.map(async room => {
+      ctx.body = jsonRes(errorCode.OK, await Promise.all(rooms.map(async room => {
         await ctx.service.videoRoom.updateWithDetail(room)
 
         return _.pick(room, [
@@ -28,7 +28,7 @@ module.exports = app => {
           'title',
           'link'
         ])
-      }))
+      })))
     }
   }
 

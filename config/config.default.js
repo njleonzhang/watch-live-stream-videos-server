@@ -9,6 +9,10 @@ module.exports = appInfo => {
   // add your config here
   config.middleware = ['getUser'];
 
+  config.getUser = {
+    ignore: '/auth/(login|register|logout)'
+  }
+
   config.sequelize = {
     dialect: 'mysql',
     database: 'example-dev',
@@ -23,6 +27,6 @@ module.exports = appInfo => {
       enable: false,
     },
   }
-  
+
   return config;
 };
