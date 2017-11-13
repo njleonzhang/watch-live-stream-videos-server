@@ -6,5 +6,5 @@ module.exports = app => {
   app.get('/auth/logout', 'auth.logout')
   // app.post('/video_room/add', 'videoRoom.add')
   app.post('/user/add_video_room', 'user.addVideoRoom')
-  app.get('/user/get_rooms', 'user.getRooms')
+  app.get('/user/rooms', 'user.getRooms')
 }
