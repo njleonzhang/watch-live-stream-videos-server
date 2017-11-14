@@ -3,39 +3,37 @@ const errorCode = require('../util/errorCode').errorCode
 module.exports = app => {
 
   const parseDataAndRefreshDB = async function (videoRoom,
-    url, propertyMap, link, dataPath = 'data.data', errorPath = 'data.errno') {
+    url, propertyMap, link, dataPath = 'data.data') {
     let result = await app.curl(url, {
       dataType: 'json',
       timeout: 3000
     })
 
-    const error = errorPath
-      .split('.')
-      .reduce((obj, attr) => {
-        return obj[attr]
-      }, result)
-
-    if (error === 0) {
-      const data = dataPath
-        .split('.')
-        .reduce((obj, attr) => {
-          return obj[attr]
-        }, result)
+    try {
+      const data = dataPath && dataPath.length > 0
+        ? dataPath
+            .split('.')
+            .reduce((obj, attr) => {
+              return obj[attr]
+            }, result)
+        : result
 
       let attrs = {}
       for (const key in propertyMap) {
         if (propertyMap.hasOwnProperty(key)) {
           attrs[key] = propertyMap[key]
-           .split('.')
-           .reduce((obj, attr) => {
-             return obj[attr]
-           }, data)
+            .split('.')
+            .reduce((obj, attr) => {
+              return obj[attr]
+            }, data)
         }
       }
 
       attrs.link = link
 
       await videoRoom.updateAttributes(attrs)
+    } catch (e) {
+      console.log('parse error', e)
     }
   }
 
@@ -46,7 +44,6 @@ module.exports = app => {
           case 'douyu':
             await parseDataAndRefreshDB(
               videoRoom,
-
               `http://open.douyucdn.cn/api/RoomApi/room/${videoRoom.roomId}`,
               {
                 online: 'online',
@@ -70,6 +67,21 @@ module.exports = app => {
                 title: 'roominfo.name'
               },
               `https://www.panda.tv/${videoRoom.roomId}`,
+            )
+            break
+
+          case 'quanmin':
+            await parseDataAndRefreshDB(
+              videoRoom,
+              `http://www.quanmin.tv/json/rooms/${videoRoom.roomId}/noinfo6.json`,
+              {
+                online: 'view',
+                screenShoot: 'thumb',
+                hostName: 'nick',
+                title: 'title'
+              },
+              `https://www.quanmin.tv/${videoRoom.roomId}`,
+              'data'
             )
             break;
 
