@@ -97,6 +97,21 @@ module.exports = app => {
                 },
                 `https://www.zhanqi.tv/${videoRoom.roomId}`
               )
+              break
+
+          case 'zhanqi':
+            await parseDataAndRefreshDB(
+              videoRoom,
+              `http://www.zhanqi.tv/api/static/v2.1/room/domain/${videoRoom.roomId}.json`,
+              {
+                online: 'online',
+                screenShoot: 'spic',
+                hostName: 'nickname',
+                title: 'title'
+              },
+              `https://www.zhanqi.tv/${videoRoom.roomId}`
+            )
+            break
 
           // other platform
         }
